@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales System</title>
+    <link rel="stylesheet" href="static/modern-ui-style.css"> <!-- Updated stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+<body>
+    <div id="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="/sales">
+                    <i class="fas fa-home nav-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products">
+                    <i class="fas fa-tags nav-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sales-record">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="container-fluid modern-ui-container">
+        <div class="row">
+            <div class="col-md-4 logo-container">
+                <!-- Company Logo -->
+                <img src="static/logo.png" alt="Company Logo" class="logo">
+            </div>
+           <!-- Products Section -->
+           <div id="products-section" class="col-md-8">
+            <h2>Products</h2>
+            <div id="product-buttons" class="d-flex flex-wrap">
+                {% for product in products %}
+                {% if product.price %}
+                <button type="button" class="btn btn-primary product-button" data-product-id="{{ product.id }}">
+                    {{ product.name }} - ${{ product.price }} - Category: {{ product.product_category }}
+                </button>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Promotions Section -->
+        <div id="promotions-section" class="col-md-8">
+            <h2>Promotions</h2>
+            <div id="promotion-buttons" class="d-flex flex-wrap">
+                {% for promo in promotions %}
+                {% if promo.name %}
+                <button type="button" class="btn btn-primary promo-button" data-promo-id="{{ promo.id }}">
+                    {{ promo.name }} - ${{ promo.price }} - Category: {{ promo.promotion_category }} - Eligible: {{ promo.eligible_category }}
+                </button>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+
+            </div>                
+            <!-- Temporary List -->
+            <div id="temporary-list" class="temporary-list">
+            <h3 class="selected-items-title">Selected Items</h3>
+            <ul id="selected-items" class="list-group"></ul>
+            <!-- Register Sale Button -->
+            <button id="register-sale" class="btn register-sale-btn">Register Sale</button>
+            <!-- Place this button where it makes sense in your sales interface -->
+            <button id="clear-sales" class="btn clear-sale-btn">Clear</button>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+            </div>
+                <div id="summary-popup" style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 100; background: white; padding: 20px; border: 1px solid black; border-radius: 5px;">
+                    <h2>Order Summary</h2>
+                    <div id="order-details"></div>
+                    <p>Total Value: <span id="order-total"></span></p>
+                    <button id="confirm-sale-button">Confirm</button>
+                    <button onclick="hidePopup()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+ <!-- Bootstrap JS and Popper.js for interactive components -->
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <!-- Custom JavaScript for handling interactions -->
+ <script type="text/javascript">
+    let promotions = {{ promotions | tojson }};
+</script>
+<script src="static/script_sales.js"></script>
+</body>
+</html>

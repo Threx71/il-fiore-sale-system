@@ -1,0 +1,108 @@
+body, h1, h3, button, input {
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    font-size: larger; /* Increase the font size for larger UI elements */
+}
+
+/* Increase the overall size of elements and space them out more */
+.container-fluid, .list-group-item {
+    padding: 20px;
+}
+
+.logo-container .logo {
+    max-width: 200px; /* Increase the size of the logo */
+}
+
+#product-buttons .product-button, .promo-button {
+    width: 100%; /* Full width to increase button size */
+    margin: 10px 0; /* Space out the buttons */
+    padding: 15px 0; /* Increase padding to make buttons taller */
+    border-radius: 5px; /* Slightly rounded corners for a square-ish look */
+    font-size: 1.25rem; /* Larger text within buttons */
+}
+
+.list-group-item {
+    justify-content: space-between; /* Align items to the edges */
+    align-items: center;
+}
+
+/* Style the quantity input to appear on the right */
+.quantity {
+    float: right; /* Move to the right */
+    margin-right: 10px; /* Add some spacing from the edge */
+}
+
+/* Remove the default list style */
+.list-group-item {
+    list-style: none;
+}
+
+/* Larger UI for selected items and register button */
+#temporary-list .selected-items-title, .register-sale-btn {
+    font-size: 1.5rem; /* Larger font size for titles and buttons */
+}
+
+.register-sale-btn {
+    padding: 20px 30px; /* Larger button padding */
+}
+/* Add to modern-ui-style.css */
+.clear-sale-btn {
+    padding: 20px 30px; /* Larger button padding */
+}
+.modal-content {
+    background-color: #f7f7f7;
+}
+
+.modal-header, .modal-footer {
+    border-bottom: none;
+    border-top: none;
+}
+
+/* Sidebar styles */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50px; /* Reduced width for a smaller static sidebar */
+    background-color: #343a40;
+    padding: 0.5rem 0;
+    display: flex; /* Use flexbox for vertical alignment */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+}
+
+#sidebar ul {
+    list-style: none; /* Remove default list-style */
+    padding: 0; /* Remove padding */
+    width: 100%; /* Full width of the sidebar */
+}
+
+#sidebar .nav-item {
+    width: 100%; /* Full width to center the icon links */
+}
+
+#sidebar .nav-link {
+    color: #ffffff;
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 50px; /* Define a fixed height for the links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+#sidebar .nav-link:hover .nav-icon,
+#sidebar .nav-link:focus .nav-icon {
+    color: #cccccc; /* Color change on hover */
+}
+
+#sidebar .nav-icon {
+    font-size: 1.5rem; /* Larger icon size */
+}
+
+/* Ensure the content is not hidden below the sidebar */
+.content {
+    margin-left: 50px; /* Width of the sidebar */
+    padding: 1rem; /* Padding around the content */
+}
+
+/* Rest of your styles... */

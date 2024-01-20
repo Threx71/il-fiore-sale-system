@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Records</title>
+    <!-- Bootstrap or other CSS links can be added here if needed -->
+    <link rel="stylesheet" href="static/modern-ui-style.css"> <!-- Updated stylesheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+<body>
+    <div id="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="/sales">
+                    <i class="fas fa-home nav-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products">
+                    <i class="fas fa-tags nav-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sales-record">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+    <div class="container">
+        <h1>Sales Records</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sale Group ID</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Sale Value</th>
+                    <th>Sale Datetime</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>{{ sale.id }}</td>
+                    <td>{{ sale.sale_group_id }}</td>
+                    <td>{{ sale.product_id }}</td>
+                    <td>{{ sale.product_name }} - Category: {{ sale.product_category }}</td>
+                    <td>{{ sale.quantity }}</td>
+                    <td>${{ "%.2f"|format(sale.sale_value) }}</td>
+                    <td>{{ sale.sale_datetime.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        <!-- Indicate if this sale was part of a promotion -->
+                        {% if sale.is_promotion_item %}
+                        <span class="badge badge-success">Promotion</span>
+                        {% endif %}
+                        <button class="btn btn-danger sale-delete-btn" data-sale-id="{{ sale.id }}">Delete</button>
+                    </td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/sales" class="btn btn-primary">Add Another Sale</a>
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+
+    <!-- Bootstrap JS and other scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <!-- Custom JavaScript for handling interactions -->
+ <script src="static/script_sales_record.js"></script>
+</body>
+</html>

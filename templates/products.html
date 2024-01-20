@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add / Edit Product or Promotion</title>
+    <link rel="stylesheet" href="static/modern-ui-style.css"> <!-- Updated stylesheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+<body>
+    <div id="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="/sales">
+                    <i class="fas fa-home nav-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products">
+                    <i class="fas fa-tags nav-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sales-record">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Add or Edit a Product</h1>
+                <form action="/products" method="post">
+                    <input type="hidden" id="product_id" name="product_id"> <!-- Hidden field for product ID -->
+                    <div class="form-group">
+                        <label for="name">Product Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" oninput="this.value = this.value.replace(/[^a-zA-Z0-9 ]/g, '')" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price:</label>
+                        <input type="number" class="form-control" id="price" name="price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_category">Product Category:</label>
+                        <input type="text" class="form-control" id="product_category" name="product_category" placeholder="e.g., Electronics, Books">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit Product</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h1>Add or Edit a Promotion</h1>
+                <form action="/add-promotion" method="post">
+                    <input type="hidden" id="promotion_id" name="promotion_id"> <!-- Hidden field for promotion ID -->
+                    <div class="form-group">
+                        <label for="promo_name">Promotion Name:</label>
+                        <input type="text" class="form-control" id="promo_name" name="promo_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="promo_price">Promotion Price:</label>
+                        <input type="number" class="form-control" id="promo_price" name="promo_price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="promotion_category">Promotion Category:</label>
+                        <input type="text" class="form-control" id="promotion_category" name="promotion_category" placeholder="e.g., Summer Sale">
+                    </div>
+                    <div class="form-group">
+                        <label for="eligible_category">Eligible Categories (comma-separated):</label>
+                        <input type="text" class="form-control" id="eligible_category" name="eligible_category" placeholder="e.g., Caja,Bolsa">
+                    </div>
+                    <div class="form-group">
+                        <label for="selectable_quantities">Quantities for Each Category (comma-separated):</label>
+                        <input type="text" class="form-control" id="selectable_quantities" name="selectable_quantities" placeholder="e.g., 1,2">
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">Submit Promotion</button>
+                </form>
+            </div>
+            
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Existing Products</h2>
+        <ul class="list-group">
+            {% for product in products %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                ID: {{ product.id }} - {{ product.name }} - ${{ product.price }}
+                <div>
+                    <button class="btn btn-info btn-sm" onclick="editProduct('{{ product.id }}', '{{ product.name | escape }}', '{{ product.price }}', '{{ product.product_category | escape }}')">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('{{ product.id }}')">Delete</button>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>Existing Promotions</h2>
+        <ul class="list-group">
+            {% for promotion in promotions %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ promotion.name }} - ${{ promotion.price }} - Constant Product ID: {{ promotion.constant_product_id }} - Selectable Products: {{ promotion.selectable_product_ids }}
+                <div>
+                    <button class="btn btn-info btn-sm" onclick="editPromotion('{{ promotion.id }}', '{{ promotion.name }}', '{{ promotion.price }}', '{{ promotion.constant_product_id }}', '{{ promotion.selectable_product_ids }}', '{{ promotion.selectable_quantities }}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deletePromotion('{{ promotion.id }}')">Delete</button>
+    </div>
+</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+</div>
+</div>        
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <!-- Custom JavaScript for handling interactions -->
+ <script src="static/script_products.js"></script>
+</body>
+</html>
