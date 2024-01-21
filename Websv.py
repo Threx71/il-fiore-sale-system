@@ -230,5 +230,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create the database tables
 
-    app.run(debug=False, port=80)
+    app.run(debug=False, port=80, host='0.0.0.0')
     
