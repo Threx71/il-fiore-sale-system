@@ -64,6 +64,11 @@ def promotion_to_dict(promotion):
         'selectable_quantities': promotion.selectable_quantities
     }
 
+@app.route('/')
+def route1():
+    # Your logic here (if any)
+    return redirect('/sales')
+
 @app.route('/sales', methods=['GET', 'POST'])
 def sales():
     if request.method == 'POST':
@@ -230,5 +235,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Create the database tables
 
-    app.run(debug=False, port=80, host='0.0.0.0')
+    app.run(debug=False, port=5000, host='0.0.0.0')
     
