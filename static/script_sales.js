@@ -151,63 +151,54 @@ let selectedPromotions = [];
     });
     
 
-function validatePromotion(promoId, selectedProducts) {
-    let promotion = promotions.find(p => p.id == promoId);
-    if (!promotion) return false;
-
-    let productsInPromotion = new Map(); // Use a map to track product ID and quantities used
-    let eligibleCategories = promotion.eligible_category.split(',');
-    let requiredQuantities = promotion.selectable_quantities.split(',').map(Number);
-
-    for (let i = 0; i < eligibleCategories.length; i++) {
-        let category = eligibleCategories[i].trim();
-        let requiredQuantity = requiredQuantities[i];
-        let quantityCount = 0;
-
-        selectedProducts.forEach(product => {
-            let alreadyCounted = productsInPromotion.get(product.productId) || 0;
-            // Check if the product category matches and if it has enough quantity left for promotion
-            if (product.category === category && alreadyCounted < product.quantity && quantityCount < requiredQuantity) {
-                productsInPromotion.set(product.productId, alreadyCounted + 1);
-                quantityCount++;
-            }
-        });
-        if (quantityCount < requiredQuantity) {
-            console.log(`Insufficient quantity for category ${category}. Required: ${requiredQuantity}, Found: ${quantityCount}`);
-            return false; // Not enough products for this promotion
+    function validatePromotion(promoId, selectedProducts) {
+        let promotion = promotions.find(p => p.id == promoId);
+        if (!promotion) {
+            console.log(`Promotion with ID ${promoId} not found.`);
+            return false;
         }
-    }
-
-    return productsInPromotion;
-}
-
-function markPromotionProducts(promoId, selectedProducts, productsInPromotion) {
-    // Reset isPromotionItem for all products
-    selectedProducts.forEach(product => {
-        product.isPromotionItem = false;
-    });
-
-    // Mark only the products that are in the promotion
-    selectedProducts.forEach(product => {
-        if (productsInPromotion.has(product.productId)) {
-            product.isPromotionItem = true;
-        }
-    });
-}
-
-function isProductInPromotion(productId, selectedPromotions) {
-    let product = selectedProducts.find(p => p.productId === productId);
-    if (!product) return false;
-
-    return selectedPromotions.some(promo => {
-        let promotion = promotions.find(p => p.id === promo.promoId);
-        if (!promotion) return false;
-
+    
+        let productsInPromotion = new Map(); // Use a map to track product ID and quantities used
         let eligibleCategories = promotion.eligible_category.split(',');
-
-        return eligibleCategories.includes(product.category);
-    });
-}
+        let requiredQuantities = promotion.selectable_quantities.split(',').map(Number);
+    
+        for (let i = 0; i < eligibleCategories.length; i++) {
+            let category = eligibleCategories[i].trim();
+            let requiredQuantity = requiredQuantities[i];
+            let quantityCount = 0;
+    
+            console.log(`Checking category: ${category} with required quantity: ${requiredQuantity}`);
+    
+            selectedProducts.forEach(product => {
+                let alreadyCounted = productsInPromotion.get(product.productId) || 0;
+            
+                console.log(`Product ID: ${product.productId}, Category: ${product.category}, Product Quantity: ${product.quantity}, Already Counted: ${alreadyCounted}`);
+            
+                if (product.category === category) {
+                    let availableQuantity = product.quantity - alreadyCounted; // Calculate the available quantity
+                    let neededQuantity = Math.min(availableQuantity, requiredQuantity - quantityCount); // Determine how much of this product we can count
+            
+                    if (neededQuantity > 0) {
+                        productsInPromotion.set(product.productId, alreadyCounted + neededQuantity);
+                        quantityCount += neededQuantity;
+                    }
+                }
+            });
+            
+            console.log(`Total found quantity for category ${category}: ${quantityCount}`);
+            
+            console.log(`Total found quantity for category ${category}: ${quantityCount}`);
+    
+            if (quantityCount < requiredQuantity) {
+                console.log(`Insufficient quantity for category ${category}. Required: ${requiredQuantity}, Found: ${quantityCount}`);
+                return false; // Not enough products for this promotion
+            }
+        }
+    
+        console.log(`Products in promotion: ${JSON.stringify(Array.from(productsInPromotion.entries()))}`);
+        return productsInPromotion;
+    }
+    
 
 function updateTemporaryListAndSummary(selectedProducts, selectedPromotions) {
     let temporaryList = document.getElementById('selected-items');
