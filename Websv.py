@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, Response, make_response
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import text
-import pytz
+from io import StringIO
+import pytz, csv
+import pandas as pd
+from io import BytesIO  # Import BytesIO
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # Adjust the URI as needed
@@ -230,6 +234,35 @@ def delete_sale(sale_id):
         return jsonify({'status': 'success', 'message': 'Sale deleted successfully'}), 200
     else:
         return jsonify({'status': 'error', 'message': 'Sale not found'}), 404
+    
+from io import BytesIO  # Import BytesIO
+import pandas as pd  # Make sure pandas is imported
+
+# ... [rest of your Flask app code] ...
+
+@app.route('/export-sales')
+def export_sales():
+    # Querying all sales data
+    sales_data = Sales.query.all()
+
+    # Creating a BytesIO object for Excel data
+    output = BytesIO()
+
+    # Convert sales data to a Pandas DataFrame
+    df = pd.DataFrame([(sale.id, sale.sale_group_id, sale.product_id, sale.product_name, sale.product_category, sale.promotion_category, sale.quantity, sale.sale_value, sale.sale_datetime) for sale in sales_data],
+                      columns=['ID', 'Sale Group ID', 'Product ID', 'Product Name', 'Product Category', 'Promotion Category', 'Quantity', 'Sale Value', 'Sale Datetime'])
+
+    # Write DataFrame to Excel
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Sales Data')
+        # Removed writer.save() as it's not needed within a context manager
+
+    # Set the response headers and body
+    output.seek(0)  # Go back to the beginning of the BytesIO stream
+    response = Response(output, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.headers["Content-Disposition"] = "attachment; filename=sales_export.xlsx"
+    return response
+
 
 if __name__ == '__main__':
     with app.app_context():

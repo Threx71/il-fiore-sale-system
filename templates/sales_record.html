@@ -31,6 +31,10 @@
     <div class="content">
         <div class="container">
             <h1>Sales Records</h1>
+            <div class="button-group mb-3" style="display: flex;">
+                <a href="/sales" class="btn btn-primary mr-2">Add Another Sale</a>
+                <a href="/export-sales" class="btn" style="background-color: #28a745; color: white;">Export Sales Data</a>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -65,7 +69,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <a href="/sales" class="btn btn-primary">Add Another Sale</a>
         </div>
     </div>
 
